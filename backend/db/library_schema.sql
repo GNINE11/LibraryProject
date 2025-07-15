@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS LibrarySchema;
+
+CREATE DATABASE IF NOT EXISTS LibrarySchema DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE LibrarySchema;
 
 -- 1. Cliente
@@ -32,6 +35,8 @@ CREATE TABLE IF NOT EXISTS Livro (
     titulo VARCHAR(150) NOT NULL,
     autor VARCHAR(100) NOT NULL,
     descricao TEXT,
+    categoria VARCHAR(50),
+    imagem_url VARCHAR(255),
     isbn VARCHAR(20) UNIQUE,
     preco DECIMAL(10, 2) NOT NULL,
     estoqueDisponivel INT NOT NULL DEFAULT 0,
@@ -39,7 +44,7 @@ CREATE TABLE IF NOT EXISTS Livro (
     dataCadastro DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- 4. Pedido (execute depois de Cliente e Endereco)
+-- 4. Pedido
 CREATE TABLE IF NOT EXISTS Pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
@@ -47,23 +52,32 @@ CREATE TABLE IF NOT EXISTS Pedido (
     dataPedido DATETIME DEFAULT CURRENT_TIMESTAMP,
     status ENUM('PENDENTE', 'PROCESSANDO', 'ENVIADO', 'ENTREGUE', 'CANCELADO') DEFAULT 'PENDENTE',
     valorTotal DECIMAL(10, 2) NOT NULL,
+    metodo_pagamento ENUM('CARTAO', 'BOLETO', 'PIX'),
     FOREIGN KEY (cliente_id) REFERENCES Cliente(id),
     FOREIGN KEY (endereco_id) REFERENCES Endereco(id)
 ) ENGINE=InnoDB;
 
--- 5. ItemPedido (execute depois de Pedido e Livro)
+-- 5. ItemPedido
 CREATE TABLE IF NOT EXISTS ItemPedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT NOT NULL,
     livro_id INT NOT NULL,
     quantidade INT NOT NULL DEFAULT 1,
     precoUnitario DECIMAL(10, 2) NOT NULL,
+    condicao ENUM('NOVO', 'USADO') NOT NULL DEFAULT 'NOVO',
     FOREIGN KEY (pedido_id) REFERENCES Pedido(id) ON DELETE CASCADE,
     FOREIGN KEY (livro_id) REFERENCES Livro(id)
 ) ENGINE=InnoDB;
 
+-- 6. Carrinho
+CREATE TABLE IF NOT EXISTS Carrinho (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL UNIQUE,
+    dataCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cliente_id) REFERENCES Cliente(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
--- 7. Tabela ItemCarrinho
+-- 7. ItemCarrinho
 CREATE TABLE IF NOT EXISTS ItemCarrinho (
     carrinho_id INT NOT NULL,
     livro_id INT NOT NULL,
@@ -74,7 +88,7 @@ CREATE TABLE IF NOT EXISTS ItemCarrinho (
     FOREIGN KEY (livro_id) REFERENCES Livro(id)
 ) ENGINE=InnoDB;
 
--- 8. Tabela Pagamento (para rastrear transações)
+-- 8. Pagamento
 CREATE TABLE IF NOT EXISTS Pagamento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT NOT NULL UNIQUE,
@@ -86,21 +100,7 @@ CREATE TABLE IF NOT EXISTS Pagamento (
     FOREIGN KEY (pedido_id) REFERENCES Pedido(id)
 ) ENGINE=InnoDB;
 
-
--- Adicionar campo de categoria ao Livro
-ALTER TABLE Livro ADD COLUMN categoria VARCHAR(50) AFTER descricao;
-
--- Adicionar URL de imagem para livros
-ALTER TABLE Livro ADD COLUMN imagem_url VARCHAR(255) AFTER categoria;
-
--- Adicionar método de pagamento ao Pedido
-ALTER TABLE Pedido ADD COLUMN metodo_pagamento ENUM('CARTAO', 'BOLETO', 'PIX') AFTER valorTotal;
-
--- Adicionar condição do produto no ItemPedido (importante para histórico)
-ALTER TABLE ItemPedido ADD COLUMN condicao ENUM('NOVO', 'USADO') NOT NULL DEFAULT 'NOVO' AFTER precoUnitario;
-
-
-
+-- Índices
 CREATE INDEX idx_livro_titulo ON Livro(titulo);
 CREATE INDEX idx_livro_autor ON Livro(autor);
 CREATE INDEX idx_pedido_cliente ON Pedido(cliente_id);
