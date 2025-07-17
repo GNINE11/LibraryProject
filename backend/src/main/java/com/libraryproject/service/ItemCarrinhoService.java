@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.libraryproject.model.ItemCarrinho;
 import com.libraryproject.model.ItemCarrinhoPK;
 import com.libraryproject.repository.ItemCarrinhoRepository;
 
+@Service
 public class ItemCarrinhoService {
     
     @Autowired
@@ -22,8 +24,8 @@ public class ItemCarrinhoService {
         return itemCarrinhoRepository.findById(id);
     }
 
-    public List<ItemCarrinho> buscarPorCarrinhoId(Long id) {
-        return itemCarrinhoRepository.findByCarrinhoId(id);
+    public List<ItemCarrinho> buscarPorCarrinhoID(Long id) {
+        return itemCarrinhoRepository.findByCarrinhoID(id);
     }
 
     public List<ItemCarrinho> listarTodos() {

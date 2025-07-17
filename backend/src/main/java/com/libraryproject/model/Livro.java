@@ -1,7 +1,16 @@
 package com.libraryproject.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Livro")
@@ -30,7 +39,7 @@ public class Livro {
     private String isbn;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private Double preco;
+    private BigDecimal preco;
 
     @Column(name = "estoqueDisponivel", nullable = false)
     private Integer estoqueDisponivel = 0;
@@ -98,11 +107,11 @@ public class Livro {
         this.isbn = isbn;
     }
 
-    public Double getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setPreco(Double preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 

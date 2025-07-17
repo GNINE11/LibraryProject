@@ -1,7 +1,19 @@
 package com.libraryproject.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Pedido")
@@ -27,7 +39,7 @@ public class Pedido {
     private StatusPagamento status = StatusPagamento.PENDENTE;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private Double valorTotal;
+    private BigDecimal valorTotal;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "metodo_pagamento", length = 10)
@@ -70,11 +82,11 @@ public class Pedido {
         this.status = status;
     }
 
-    public Double getValorTotal() {
+    public BigDecimal getValorTotal() {
         return valorTotal;
     }
 
-    public void setValorTotal(double valorTotal) {
+    public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
     }
 

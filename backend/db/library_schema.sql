@@ -3,8 +3,8 @@ DROP DATABASE IF EXISTS LibrarySchema;
 CREATE DATABASE IF NOT EXISTS LibrarySchema DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE LibrarySchema;
 
--- 1. Cliente
-CREATE TABLE IF NOT EXISTS Cliente (
+-- 1. cliente
+CREATE TABLE IF NOT EXISTS cliente (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS Cliente (
     tipo ENUM('CLIENTE', 'ADMIN') DEFAULT 'CLIENTE'
 ) ENGINE=InnoDB;
 
--- 2. Endereco
-CREATE TABLE IF NOT EXISTS Endereco (
+-- 2. endereco
+CREATE TABLE IF NOT EXISTS endereco (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
     rua VARCHAR(150) NOT NULL,
@@ -26,11 +26,11 @@ CREATE TABLE IF NOT EXISTS Endereco (
     estado CHAR(2) NOT NULL,
     cep CHAR(9) NOT NULL,
     is_principal BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (cliente_id) REFERENCES Cliente(id) ON DELETE CASCADE
+    FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 3. Livro
-CREATE TABLE IF NOT EXISTS Livro (
+-- 3. livro
+CREATE TABLE IF NOT EXISTS livro (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     autor VARCHAR(100) NOT NULL,
@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS Livro (
     dataCadastro DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- 4. Pedido
-CREATE TABLE IF NOT EXISTS Pedido (
+-- 4. pedido
+CREATE TABLE IF NOT EXISTS pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
     endereco_id INT NOT NULL,
@@ -53,43 +53,43 @@ CREATE TABLE IF NOT EXISTS Pedido (
     status ENUM('PENDENTE', 'PROCESSANDO', 'ENVIADO', 'ENTREGUE', 'CANCELADO') DEFAULT 'PENDENTE',
     valorTotal DECIMAL(10, 2) NOT NULL,
     metodo_pagamento ENUM('CARTAO', 'BOLETO', 'PIX'),
-    FOREIGN KEY (cliente_id) REFERENCES Cliente(id),
-    FOREIGN KEY (endereco_id) REFERENCES Endereco(id)
+    FOREIGN KEY (cliente_id) REFERENCES cliente(id),
+    FOREIGN KEY (endereco_id) REFERENCES endereco(id)
 ) ENGINE=InnoDB;
 
--- 5. ItemPedido
-CREATE TABLE IF NOT EXISTS ItemPedido (
+-- 5. itempedido
+CREATE TABLE IF NOT EXISTS itempedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT NOT NULL,
     livro_id INT NOT NULL,
     quantidade INT NOT NULL DEFAULT 1,
     precoUnitario DECIMAL(10, 2) NOT NULL,
     condicao ENUM('NOVO', 'USADO') NOT NULL DEFAULT 'NOVO',
-    FOREIGN KEY (pedido_id) REFERENCES Pedido(id) ON DELETE CASCADE,
-    FOREIGN KEY (livro_id) REFERENCES Livro(id)
+    FOREIGN KEY (pedido_id) REFERENCES pedido(id) ON DELETE CASCADE,
+    FOREIGN KEY (livro_id) REFERENCES livro(id)
 ) ENGINE=InnoDB;
 
--- 6. Carrinho
-CREATE TABLE IF NOT EXISTS Carrinho (
+-- 6. carrinho
+CREATE TABLE IF NOT EXISTS carrinho (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL UNIQUE,
     dataCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (cliente_id) REFERENCES Cliente(id) ON DELETE CASCADE
+    FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 7. ItemCarrinho
-CREATE TABLE IF NOT EXISTS ItemCarrinho (
+-- 7. itemcarrinho
+CREATE TABLE IF NOT EXISTS itemcarrinho (
     carrinho_id INT NOT NULL,
     livro_id INT NOT NULL,
     quantidade INT NOT NULL DEFAULT 1,
     condicao ENUM('NOVO', 'USADO') NOT NULL,
     PRIMARY KEY (carrinho_id, livro_id, condicao),
-    FOREIGN KEY (carrinho_id) REFERENCES Carrinho(id) ON DELETE CASCADE,
-    FOREIGN KEY (livro_id) REFERENCES Livro(id)
+    FOREIGN KEY (carrinho_id) REFERENCES carrinho(id) ON DELETE CASCADE,
+    FOREIGN KEY (livro_id) REFERENCES livro(id)
 ) ENGINE=InnoDB;
 
--- 8. Pagamento
-CREATE TABLE IF NOT EXISTS Pagamento (
+-- 8. pagamento
+CREATE TABLE IF NOT EXISTS pagamento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT NOT NULL UNIQUE,
     valor DECIMAL(10,2) NOT NULL,
@@ -97,11 +97,11 @@ CREATE TABLE IF NOT EXISTS Pagamento (
     status ENUM('PENDENTE', 'APROVADO', 'RECUSADO', 'ESTORNADO') DEFAULT 'PENDENTE',
     dataPagamento DATETIME,
     codigo_transacao VARCHAR(100),
-    FOREIGN KEY (pedido_id) REFERENCES Pedido(id)
+    FOREIGN KEY (pedido_id) REFERENCES pedido(id)
 ) ENGINE=InnoDB;
 
 -- Índices
-CREATE INDEX idx_livro_titulo ON Livro(titulo);
-CREATE INDEX idx_livro_autor ON Livro(autor);
-CREATE INDEX idx_pedido_cliente ON Pedido(cliente_id);
-CREATE INDEX idx_pedido_status ON Pedido(status);
+CREATE INDEX idx_livro_titulo ON livro(titulo);
+CREATE INDEX idx_livro_autor ON livro(autor);
+CREATE INDEX idx_pedido_cliente ON pedido(cliente_id);
+CREATE INDEX idx_pedido_status ON pedido(status);
