@@ -34,7 +34,7 @@ public class ClienteController {
         return clienteService.buscarPorId(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/por-email")
+    @GetMapping("/email/{email}")
     public ResponseEntity<Cliente> buscarPorEmail(@RequestParam String email){
         return clienteService.buscarPorEmail(email).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
