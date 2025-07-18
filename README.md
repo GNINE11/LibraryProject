@@ -58,7 +58,7 @@ LibraryProject/
 
 O projeto segue um modelo relacional, com entidades como Cliente, Livro, Pedido, entre outras.  
 
-📎 [Visualizar Diagrama EER](backend/db/DiagramaEER_LibraryProject.png)  
+![Diagrama EER](backend/db/DiagramaEER_LibraryProject.png)
 
 ---  
 
