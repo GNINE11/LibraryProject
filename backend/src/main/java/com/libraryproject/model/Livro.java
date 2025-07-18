@@ -13,7 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Livro")
+@Table(name = "livro")
 public class Livro {
     
     @Id
@@ -33,7 +33,7 @@ public class Livro {
     private String categoria;
 
     @Column(length = 255)
-    private String imagemURL;
+    private String imagem_url;
 
     @Column(unique = true, length = 20)
     private String isbn;
@@ -92,11 +92,11 @@ public class Livro {
     }
 
     public String getImagemURL() {
-        return imagemURL;
+        return imagem_url;
     }
 
-    public void setImagemURL(String imagemURL) {
-        this.imagemURL = imagemURL;
+    public void setImagemURL(String imagem_url) {
+        this.imagem_url = imagem_url;
     }
 
     public String getIsbn() {
