@@ -29,13 +29,18 @@ CREATE TABLE IF NOT EXISTS endereco (
     FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 3. livro
+-- 3. categoria
+CREATE TABLE IF NOT EXISTS categoria (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL UNIQUE
+) ENGINE=InnoDB;
+
+-- 4. livro
 CREATE TABLE IF NOT EXISTS livro (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     autor VARCHAR(100) NOT NULL,
     descricao TEXT,
-    categoria VARCHAR(50),
     imagem_url VARCHAR(255),
     isbn VARCHAR(20) UNIQUE,
     preco DECIMAL(10, 2) NOT NULL,
@@ -44,7 +49,16 @@ CREATE TABLE IF NOT EXISTS livro (
     dataCadastro DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- 4. pedido
+-- 4.1. livro_categoria (relacionamento muitos-para-muitos)
+CREATE TABLE IF NOT EXISTS livro_categoria (
+    livro_id INT NOT NULL,
+    categoria_id INT NOT NULL,
+    PRIMARY KEY (livro_id, categoria_id),
+    FOREIGN KEY (livro_id) REFERENCES livro(id) ON DELETE CASCADE,
+    FOREIGN KEY (categoria_id) REFERENCES categoria(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- 5. pedido
 CREATE TABLE IF NOT EXISTS pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
@@ -57,7 +71,7 @@ CREATE TABLE IF NOT EXISTS pedido (
     FOREIGN KEY (endereco_id) REFERENCES endereco(id)
 ) ENGINE=InnoDB;
 
--- 5. itempedido
+-- 6. itempedido
 CREATE TABLE IF NOT EXISTS itempedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT NOT NULL,
@@ -69,7 +83,7 @@ CREATE TABLE IF NOT EXISTS itempedido (
     FOREIGN KEY (livro_id) REFERENCES livro(id)
 ) ENGINE=InnoDB;
 
--- 6. carrinho
+-- 7. carrinho
 CREATE TABLE IF NOT EXISTS carrinho (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL UNIQUE,
@@ -77,7 +91,7 @@ CREATE TABLE IF NOT EXISTS carrinho (
     FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 7. itemcarrinho
+-- 8. itemcarrinho
 CREATE TABLE IF NOT EXISTS itemcarrinho (
     carrinho_id INT NOT NULL,
     livro_id INT NOT NULL,
@@ -88,7 +102,7 @@ CREATE TABLE IF NOT EXISTS itemcarrinho (
     FOREIGN KEY (livro_id) REFERENCES livro(id)
 ) ENGINE=InnoDB;
 
--- 8. pagamento
+-- 9. pagamento
 CREATE TABLE IF NOT EXISTS pagamento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT NOT NULL UNIQUE,

@@ -2,6 +2,7 @@ package com.libraryproject.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +11,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,9 +33,6 @@ public class Livro {
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
-    @Column(length = 50)
-    private String categoria;
-
     @Column(length = 255)
     private String imagem_url;
 
@@ -50,6 +51,14 @@ public class Livro {
     
     @Column(name = "dataCadastro", insertable = false, updatable = false)
     private LocalDateTime dataCadastro;
+
+    @ManyToMany
+    @JoinTable(
+        name = "livro_categoria",
+        joinColumns = @JoinColumn(name = "livro_id"),
+        inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private Set<Categoria> categorias;
 
     public Long getId() {
         return id;
@@ -81,14 +90,6 @@ public class Livro {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
     }
 
     public String getImagemURL() {
@@ -134,6 +135,12 @@ public class Livro {
     public LocalDateTime getDataCadastro(){
         return dataCadastro;
     } 
-    
 
+    public Set<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(Set<Categoria> categorias) {
+        this.categorias = categorias;
+    }
 }
