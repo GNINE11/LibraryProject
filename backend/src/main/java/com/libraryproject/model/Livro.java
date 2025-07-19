@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -33,8 +35,9 @@ public class Livro {
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
-    @Column(length = 255)
-    private String imagem_url;
+    @Column(name= "imagem_url", length = 255)
+    @JsonProperty("imagemURL")
+    private String imagemUrl;
 
     @Column(unique = true, length = 20)
     private String isbn;
@@ -93,11 +96,11 @@ public class Livro {
     }
 
     public String getImagemURL() {
-        return imagem_url;
+        return imagemUrl;
     }
 
-    public void setImagemURL(String imagem_url) {
-        this.imagem_url = imagem_url;
+    public void setImagemURL(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
     }
 
     public String getIsbn() {
