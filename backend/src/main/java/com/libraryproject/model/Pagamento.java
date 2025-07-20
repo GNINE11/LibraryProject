@@ -18,7 +18,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Pagamento")
+@Table(name = "pagamento")
 public class Pagamento {
     
     @Id
@@ -42,8 +42,8 @@ public class Pagamento {
     private StatusPagamento status = StatusPagamento.PENDENTE;
 
     private LocalDateTime dataPagamento;
-
-    @Column(length = 100)
+    
+    @Column(name = "codigo_transacao", length = 100)
     private String codigoTransacao;
 
     public Long getId() {
