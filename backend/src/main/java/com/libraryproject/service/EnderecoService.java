@@ -29,7 +29,6 @@ public class EnderecoService {
         return enderecoRepository.save(endereco);
     }
 
-
     public Optional<Endereco> buscarPorId(Long id){
         return enderecoRepository.findById(id);
     }
@@ -40,6 +39,38 @@ public class EnderecoService {
 
     public List<Endereco> listarTodos(){
         return enderecoRepository.findAll();
+    }
+
+    public Endereco atualizar(Long id, Endereco novoEndereco){
+        return enderecoRepository.findById(id)
+            .map(enderecoExistente -> {
+                enderecoExistente.setRua(novoEndereco.getRua());
+                enderecoExistente.setNumero(novoEndereco.getNumero());
+                enderecoExistente.setComplemento(novoEndereco.getComplemento());
+                enderecoExistente.setBairro(novoEndereco.getBairro());
+                enderecoExistente.setCidade(novoEndereco.getCidade());
+                enderecoExistente.setEstado(novoEndereco.getEstado());
+                enderecoExistente.setCep(novoEndereco.getCep());
+
+                return enderecoRepository.save(enderecoExistente);
+            }).orElseThrow(() -> new RuntimeException("Rua não encontrada com o id: " + id));
+    }
+
+    public Endereco definirComoPrincipal(Long id){
+        Endereco endereco = enderecoRepository.findById(id).orElseThrow(() -> new RuntimeException("Endereço não encontrado com ID: " + id));
+
+        Cliente cliente = endereco.getCliente();
+        List<Endereco> enderecosDoCliente = enderecoRepository.findByCliente(cliente);
+
+        for(Endereco atual : enderecosDoCliente){
+            if (atual.getIsPrincipal().equals(Boolean.TRUE)){
+                atual.setIsPrincipal(false);
+                enderecoRepository.save(atual);
+            }
+        }
+
+        endereco.setIsPrincipal(true);
+        return enderecoRepository.save(endereco);
     }
 
     public void deletarPorId(Long id){

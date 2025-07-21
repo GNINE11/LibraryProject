@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +48,22 @@ public class EnderecoController {
     public ResponseEntity<List<Endereco>> listarTodos(){
         List<Endereco> enderecos = enderecoService.listarTodos();
         return ResponseEntity.ok(enderecos);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Endereco> atualizar(@PathVariable Long id, @RequestBody Endereco endereco){
+        try {
+            Endereco enderecoAtualizado = enderecoService.atualizar(id, endereco);
+            return ResponseEntity.ok(enderecoAtualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping("definir-principal/{id}")
+    public ResponseEntity<Endereco> definirEnderecoPrincipal(@PathVariable Long id){
+        Endereco enderecoAtualizado = enderecoService.definirComoPrincipal(id);
+        return ResponseEntity.ok(enderecoAtualizado);
     }
 
     @DeleteMapping("/{id}")
