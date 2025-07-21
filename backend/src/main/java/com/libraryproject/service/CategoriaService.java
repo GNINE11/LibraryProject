@@ -32,20 +32,16 @@ public class CategoriaService {
     }
 
     public Categoria atualizarNome(Long id, String novoNome){
-        Categoria categoria = categoriaRepository.findById(id).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+        Categoria categoria = categoriaRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
         if (categoriaRepository.findByNome(novoNome).isPresent()) {
-            throw new RuntimeException("Nome já está em uso");
-        }
-        
-        if (!categoria.getNome().equals(novoNome)) {
-            categoria.setNome(novoNome);
-            return categoriaRepository.save(categoria);
+            throw new RuntimeException("Nome já está em uso por outra categoria");
         }
 
         categoria.setNome(novoNome);
-        return categoria;
-    }
+        return categoriaRepository.save(categoria);
+    } 
 
     public void deletarPorId(Long id) {
         categoriaRepository.deleteById(id);

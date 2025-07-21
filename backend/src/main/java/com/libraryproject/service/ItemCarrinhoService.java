@@ -32,6 +32,14 @@ public class ItemCarrinhoService {
         return itemCarrinhoRepository.findAll();
     }
 
+    public ItemCarrinho atualizarQuantidade(ItemCarrinhoPK id, Integer quantidade){
+        ItemCarrinho itemCarrinho = itemCarrinhoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("ItemCarrinho não encontrado"));
+        
+        itemCarrinho.setQuantidade(quantidade);
+        return itemCarrinhoRepository.save(itemCarrinho);
+    }
+
     public void deletarPorId(ItemCarrinhoPK id) {
         itemCarrinhoRepository.deleteById(id);
     }

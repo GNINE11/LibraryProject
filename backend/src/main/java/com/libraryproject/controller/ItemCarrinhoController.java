@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.libraryproject.model.CondicaoLivro;
@@ -51,6 +53,21 @@ public class ItemCarrinhoController {
     public ResponseEntity<List<ItemCarrinho>> listarTodos(){
         List <ItemCarrinho> itensCarrinho = itemCarrinhoService.listarTodos();
         return ResponseEntity.ok(itensCarrinho);
+    }
+
+    @PatchMapping("/{carrinhoId}/{livroId}/{condicao}/quantidade")
+    public ResponseEntity<ItemCarrinho> atualizarQuantidade(@PathVariable Long carrinhoId, @PathVariable Long livroId, @PathVariable CondicaoLivro condicao, @RequestParam Integer quantidade){
+        try {
+            ItemCarrinhoPK id = new ItemCarrinhoPK();
+            id.setCarrinhoId(carrinhoId);
+            id.setLivroId(livroId);
+            id.setCondicao(condicao);
+
+            ItemCarrinho atualizado = itemCarrinhoService.atualizarQuantidade(id, quantidade);
+            return ResponseEntity.ok(atualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{carrinhoId}/{livroId}/{condicao}")

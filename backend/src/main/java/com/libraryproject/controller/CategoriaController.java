@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.RestController;
 
 import com.libraryproject.model.Categoria;
 import com.libraryproject.service.CategoriaService;
@@ -54,8 +53,12 @@ public class CategoriaController {
 
     @PatchMapping("/{id}/nome")
     public ResponseEntity<Categoria> atualizarNomeCategoria(@PathVariable Long id, @RequestParam String nome){
-        Categoria categoria = categoriaService.atualizarNome(id, nome);
-        return ResponseEntity.ok(categoria);
+        try {
+            Categoria categoria = categoriaService.atualizarNome(id, nome);
+            return ResponseEntity.ok(categoria);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
