@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +45,29 @@ public class ClienteController {
     public ResponseEntity<List<Cliente>> listarTodos(){
         List<Cliente> clientes = clienteService.listarTodos();
         return ResponseEntity.ok(clientes);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Cliente> atualizar(@PathVariable Long id, @RequestBody Cliente novoCliente){
+        try {
+            Cliente atualizado = clienteService.atualizar(id, novoCliente);
+            return ResponseEntity.ok(atualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping("/{id}/email")
+    public ResponseEntity<Cliente> atualizarEmail(@PathVariable Long id, @RequestParam String email){
+        Cliente cliente = clienteService.atualizarEmail(id, email);
+        return ResponseEntity.ok(cliente);
+    }
+
+    //Atualizar dps para a segurança
+    @PatchMapping("/{id}/senha")
+    public ResponseEntity<Cliente> atualizarSenha(@PathVariable Long id, @RequestParam String senha){
+        clienteService.atualizarSenha(id, senha);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
