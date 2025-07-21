@@ -15,7 +15,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Carrinho")
+@Table(name = "carrinho")
 public class Carrinho {
     
     @Id
@@ -27,7 +27,7 @@ public class Carrinho {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Cliente cliente;
 
-    @Column(nullable = false)
+    @Column(name = "dataCriacao", insertable = false, updatable = false)
     private LocalDateTime dataCriacao;
 
     
