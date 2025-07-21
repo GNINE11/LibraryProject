@@ -2,6 +2,9 @@ package com.libraryproject.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,10 +13,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Livro")
+@Table(name = "livro")
 public class Livro {
     
     @Id
@@ -29,11 +35,9 @@ public class Livro {
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
-    @Column(length = 50)
-    private String categoria;
-
-    @Column(length = 255)
-    private String imagemURL;
+    @Column(name= "imagem_url", length = 255)
+    @JsonProperty("imagemURL")
+    private String imagemUrl;
 
     @Column(unique = true, length = 20)
     private String isbn;
@@ -50,6 +54,14 @@ public class Livro {
     
     @Column(name = "dataCadastro", insertable = false, updatable = false)
     private LocalDateTime dataCadastro;
+
+    @ManyToMany
+    @JoinTable(
+        name = "livro_categoria",
+        joinColumns = @JoinColumn(name = "livro_id"),
+        inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private Set<Categoria> categorias;
 
     public Long getId() {
         return id;
@@ -83,20 +95,12 @@ public class Livro {
         this.descricao = descricao;
     }
 
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
     public String getImagemURL() {
-        return imagemURL;
+        return imagemUrl;
     }
 
-    public void setImagemURL(String imagemURL) {
-        this.imagemURL = imagemURL;
+    public void setImagemURL(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
     }
 
     public String getIsbn() {
@@ -134,6 +138,12 @@ public class Livro {
     public LocalDateTime getDataCadastro(){
         return dataCadastro;
     } 
-    
 
+    public Set<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(Set<Categoria> categorias) {
+        this.categorias = categorias;
+    }
 }

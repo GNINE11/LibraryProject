@@ -9,5 +9,5 @@ import com.libraryproject.model.ItemCarrinhoPK;
 
 public interface ItemCarrinhoRepository extends JpaRepository<ItemCarrinho, ItemCarrinhoPK> {
 
-    List<ItemCarrinho> findByCarrinhoID(Long carrinhoId);
+    List<ItemCarrinho> findByCarrinhoId(Long carrinhoId);
 }

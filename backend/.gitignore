@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### Testes JSON ###
+/db/testesJSON.txt

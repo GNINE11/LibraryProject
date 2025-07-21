@@ -3,6 +3,8 @@ package com.libraryproject.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,7 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Pedido")
+@Table(name = "pedido")
 public class Pedido {
 
     @Id
@@ -25,18 +27,20 @@ public class Pedido {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Cliente cliente;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "endereco_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Endereco endereco;
 
-    @Column(nullable = false)
+    @Column(name = "dataPedido", insertable = false, updatable = false)
     private LocalDateTime dataPedido;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 12)
-    private StatusPagamento status = StatusPagamento.PENDENTE;
+    private StatusPedido status = StatusPedido.PENDENTE;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal valorTotal;
@@ -74,11 +78,11 @@ public class Pedido {
         return dataPedido;
     }
 
-    public StatusPagamento getStatus() {
+    public StatusPedido getStatus() {
         return status;
     }
 
-    public void setStatus(StatusPagamento status) {
+    public void setStatus(StatusPedido status) {
         this.status = status;
     }
 

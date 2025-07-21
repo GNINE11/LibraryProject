@@ -3,6 +3,8 @@ package com.libraryproject.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,7 +18,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Pagamento")
+@Table(name = "pagamento")
 public class Pagamento {
     
     @Id
@@ -25,6 +27,7 @@ public class Pagamento {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id", nullable = false, unique = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Pedido pedido;
     
     @Column(nullable = false, precision = 10, scale = 2)
@@ -39,8 +42,8 @@ public class Pagamento {
     private StatusPagamento status = StatusPagamento.PENDENTE;
 
     private LocalDateTime dataPagamento;
-
-    @Column(length = 100)
+    
+    @Column(name = "codigo_transacao", length = 100)
     private String codigoTransacao;
 
     public Long getId() {

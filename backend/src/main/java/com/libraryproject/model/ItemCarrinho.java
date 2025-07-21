@@ -1,19 +1,25 @@
 package com.libraryproject.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "ItemCarrinho")
+@Table(name = "itemcarrinho")
 @IdClass(ItemCarrinhoPK.class)
 public class ItemCarrinho {
     
     @Id
     @Column(name = "carrinho_id")
-    private Long carrinhoID;
+    private Long carrinhoId;
 
     @Id
     @Column(name = "livro_id")
-    private Long livroID;
+    private Long livroId;
     
     @Id
     @Enumerated(EnumType.STRING)
@@ -23,21 +29,20 @@ public class ItemCarrinho {
     @Column(nullable = false)
     private Integer quantidade = 1;
 
-
-    public Long getCarrinhoID() {
-        return carrinhoID;
+    public Long getCarrinhoId() {
+        return carrinhoId;
     }
 
-    public void setCarrinhoID(Long carrinhoID) {
-        this.carrinhoID = carrinhoID;
+    public void setCarrinhoId(Long carrinhoId) {
+        this.carrinhoId = carrinhoId;
     }
 
-    public Long getLivroID() {
-        return livroID;
+    public Long getLivroId() {
+        return livroId;
     }
 
-    public void setLivroID(Long livroID) {
-        this.livroID = livroID;
+    public void setLivroId(Long livroId) {
+        this.livroId = livroId;
     }
 
     public Integer getQuantidade() {
@@ -55,5 +60,4 @@ public class ItemCarrinho {
     public void setCondicao(CondicaoLivro condicao) {
         this.condicao = condicao;
     }
-
 }
