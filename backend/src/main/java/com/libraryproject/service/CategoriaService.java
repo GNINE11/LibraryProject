@@ -23,12 +23,28 @@ public class CategoriaService {
         return categoriaRepository.findById(id);
     }
 
-    public Categoria buscarPorNome(String nome) {
+    public Optional<Categoria> buscarPorNome(String nome) {
         return categoriaRepository.findByNome(nome);
     }
 
     public List<Categoria> listarTodos() {
         return categoriaRepository.findAll();
+    }
+
+    public Categoria atualizarNome(Long id, String novoNome){
+        Categoria categoria = categoriaRepository.findById(id).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+
+        if (categoriaRepository.findByNome(novoNome).isPresent()) {
+            throw new RuntimeException("Nome já está em uso");
+        }
+        
+        if (!categoria.getNome().equals(novoNome)) {
+            categoria.setNome(novoNome);
+            return categoriaRepository.save(categoria);
+        }
+
+        categoria.setNome(novoNome);
+        return categoria;
     }
 
     public void deletarPorId(Long id) {

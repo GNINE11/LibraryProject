@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 import com.libraryproject.model.Categoria;
 import com.libraryproject.service.CategoriaService;
@@ -38,18 +41,21 @@ public class CategoriaController {
 
     @GetMapping("/nome/{nome}")
     public ResponseEntity<Categoria> buscarPorNome(@PathVariable String nome) {
-        Categoria categoria = categoriaService.buscarPorNome(nome);
-        if (categoria != null) {
-            return ResponseEntity.ok(categoria);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Optional<Categoria> categoria = categoriaService.buscarPorNome(nome);
+        return categoria.map(ResponseEntity::ok)
+                        .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<List<Categoria>> listarTodos() {
         List<Categoria> categorias = categoriaService.listarTodos();
         return ResponseEntity.ok(categorias);
+    }
+
+    @PatchMapping("/{id}/nome")
+    public ResponseEntity<Categoria> atualizarNomeCategoria(@PathVariable Long id, @RequestParam String nome){
+        Categoria categoria = categoriaService.atualizarNome(id, nome);
+        return ResponseEntity.ok(categoria);
     }
 
     @DeleteMapping("/{id}")
