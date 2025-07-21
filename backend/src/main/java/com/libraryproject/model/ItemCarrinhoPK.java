@@ -5,8 +5,8 @@ import java.util.Objects;
 
 public class ItemCarrinhoPK implements Serializable {
     
-    private Long carrinhoID;
-    private Long livroID;
+    private Long carrinhoId;
+    private Long livroId;
     private CondicaoLivro condicao;
 
     @Override
@@ -18,13 +18,37 @@ public class ItemCarrinhoPK implements Serializable {
         
         ItemCarrinhoPK that = (ItemCarrinhoPK) o;
 
-        return Objects.equals(carrinhoID, that.carrinhoID) &&
-               Objects.equals(livroID, that.livroID) &&
+        return Objects.equals(carrinhoId, that.carrinhoId) &&
+               Objects.equals(livroId, that.livroId) &&
                condicao == that.condicao;
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(carrinhoID, livroID, condicao);
+        return Objects.hash(carrinhoId, livroId, condicao);
+    }
+
+    public Long getCarrinhoId() {
+        return carrinhoId;
+    }
+
+    public void setCarrinhoId(Long carrinhoId) {
+        this.carrinhoId = carrinhoId;
+    }
+
+    public Long getLivroId() {
+        return livroId;
+    }
+
+    public void setLivroId(Long livroId) {
+        this.livroId = livroId;
+    }
+
+    public CondicaoLivro getCondicao() {
+        return condicao;
+    }
+
+    public void setCondicao(CondicaoLivro condicao) {
+        this.condicao = condicao;
     }
 }

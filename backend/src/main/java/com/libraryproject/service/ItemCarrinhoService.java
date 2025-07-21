@@ -25,7 +25,7 @@ public class ItemCarrinhoService {
     }
 
     public List<ItemCarrinho> buscarPorCarrinhoID(Long id) {
-        return itemCarrinhoRepository.findByCarrinhoID(id);
+        return itemCarrinhoRepository.findByCarrinhoId(id);
     }
 
     public List<ItemCarrinho> listarTodos() {
