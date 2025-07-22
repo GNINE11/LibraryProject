@@ -52,6 +52,31 @@ public class LivroService {
         return livroRepository.findAll();
     }
 
+    public Livro atualizar(Long id, Livro novoLivro){
+        Livro livro = livroRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+        
+        livro.setTitulo(novoLivro.getTitulo());
+        livro.setAutor(novoLivro.getAutor());
+        livro.setDescricao(novoLivro.getDescricao());
+        livro.setImagemURL(novoLivro.getImagemURL());
+        livro.setIsbn(novoLivro.getIsbn());
+        livro.setPreco(novoLivro.getPreco());
+        livro.setEstoqueDisponivel(novoLivro.getEstoqueDisponivel());
+        livro.setCondicao(novoLivro.getCondicao());
+        livro.setCategorias(novoLivro.getCategorias());
+
+        return livroRepository.save(livro);
+    }
+
+    public Livro atualizarEstoque(Long id, Integer novoEstoque){
+        Livro livro = livroRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+
+        livro.setEstoqueDisponivel(novoEstoque);
+        return livroRepository.save(livro);
+    }
+
     public void deletarPorId(Long id){
         livroRepository.deleteById(id);
     }

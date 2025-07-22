@@ -53,11 +53,12 @@ public class EnderecoService {
                 enderecoExistente.setCep(novoEndereco.getCep());
 
                 return enderecoRepository.save(enderecoExistente);
-            }).orElseThrow(() -> new RuntimeException("Rua não encontrada com o id: " + id));
+            }).orElseThrow(() -> new RuntimeException("Endereço não encontrado com o id: " + id));
     }
 
     public Endereco definirComoPrincipal(Long id){
-        Endereco endereco = enderecoRepository.findById(id).orElseThrow(() -> new RuntimeException("Endereço não encontrado com ID: " + id));
+        Endereco endereco = enderecoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Endereço não encontrado com ID: " + id));
 
         Cliente cliente = endereco.getCliente();
         List<Endereco> enderecosDoCliente = enderecoRepository.findByCliente(cliente);

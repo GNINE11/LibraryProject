@@ -59,15 +59,23 @@ public class ClienteController {
 
     @PatchMapping("/{id}/email")
     public ResponseEntity<Cliente> atualizarEmail(@PathVariable Long id, @RequestParam String email){
-        Cliente cliente = clienteService.atualizarEmail(id, email);
-        return ResponseEntity.ok(cliente);
+        try {
+            Cliente cliente = clienteService.atualizarEmail(id, email);
+            return ResponseEntity.ok(cliente);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     //Atualizar dps para a segurança
     @PatchMapping("/{id}/senha")
     public ResponseEntity<Cliente> atualizarSenha(@PathVariable Long id, @RequestParam String senha){
-        clienteService.atualizarSenha(id, senha);
-        return ResponseEntity.noContent().build();
+        try {
+            clienteService.atualizarSenha(id, senha);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")

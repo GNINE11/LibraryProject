@@ -62,8 +62,12 @@ public class EnderecoController {
 
     @PatchMapping("definir-principal/{id}")
     public ResponseEntity<Endereco> definirEnderecoPrincipal(@PathVariable Long id){
-        Endereco enderecoAtualizado = enderecoService.definirComoPrincipal(id);
-        return ResponseEntity.ok(enderecoAtualizado);
+        try {
+            Endereco enderecoAtualizado = enderecoService.definirComoPrincipal(id);
+            return ResponseEntity.ok(enderecoAtualizado);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
