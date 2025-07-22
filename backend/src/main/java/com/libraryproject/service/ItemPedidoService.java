@@ -32,6 +32,14 @@ public class ItemPedidoService {
         return itemPedidoRepository.findAll();
     }
 
+    public ItemPedido atualizarQuantidade(Long id, Integer quantidade){
+        ItemPedido itemPedido = itemPedidoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Item pedido não encontrado"));
+        
+        itemPedido.setQuantidade(quantidade);
+        return itemPedidoRepository.save(itemPedido);
+    }
+
     public void deletarPorId(Long id){
         itemPedidoRepository.deleteById(id);
     }
